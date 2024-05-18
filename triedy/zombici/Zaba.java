@@ -1,10 +1,8 @@
 package triedy.zombici;
-
 import fri.shapesge.Obrazok;
 import triedy.mapa.Mapa;
 import triedy.mapa.StavPolicka;
 import triedy.pohyb.Hrac;
-
 import java.io.IOException;
 import javax.swing.Timer;
 import java.awt.event.ActionEvent;
