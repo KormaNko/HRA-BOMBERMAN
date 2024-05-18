@@ -58,18 +58,14 @@ public class Hra {
         this.manazer = new Manazer();
         this.manazer.spravujObjekt(this);
         this.zombici = new ArrayList<>();
-        if(mapa.equals("files/m.txt")) {
-            try {
+        try {
+            if (mapa.equals("files/m.txt")) {
                 this.pripravMapu1();
-            } catch (IOException e) {
-                throw new RuntimeException("Chyba pri načítani mapy.");
-            }
-        } else if (mapa.equals("files/m2.txt")) {
-            try {
+            } else if (mapa.equals("files/m2.txt")) {
                 this.pripravMapu2();
-            } catch (IOException e) {
-                throw new RuntimeException("Chyba pri načítani mapy.");
             }
+        }catch (IOException e) {
+            throw new RuntimeException("Chyba pri náčítani mapy");
         }
         Rectangle obdlznikHraca = new Rectangle(this.hrac.getPolohaX(), this.hrac.getPolohaY(), 32, 38);
         this.kolizie = new Kolizie(obdlznikHraca, this.vytvorObdlznikyBalonikov());
