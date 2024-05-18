@@ -4,39 +4,38 @@ import fri.shapesge.Obrazok;
 import fri.shapesge.BlokTextu;
 import java.util.ArrayList;
 import fri.shapesge.StylFontu;
-import triedy.zombici.Zombik;
+import triedy.zombici.*;
 
 /**
  * Trieda reprezentuje obrazovku konca hry.
  */
 public class KoniecMenu {
-    private  static Obrazok prehraMenu;
-    private  BlokTextu pocetZvysnychBalonikov;
-    private  ArrayList<Zombik> baloniky;
-    private  StylFontu bold;
+    private static Obrazok prehraMenu; // Obrázok pre obrazovku konca hry
+    private BlokTextu pocetZvysnychBalonikov; // Text s počtom zostávajúcich zombikov
+    private ArrayList<Zombik> baloniky; // Zoznam zombikov ešte nažive
+    private StylFontu bold; // Štýl písma pre text
 
     /**
      * Konštruktor pre vytvorenie obrazovky konca hry.
      *
-     * parameter   Zoznam zombíkov, ktory su este na zive
-     * parameter   Cesta k obrázku pre obrazovku konca hry (vyhra, prehra)
+     * @param baloniky Zoznam zombíkov, ktorí sú ešte nažive
+     * @param cesta Cesta k obrázku pre obrazovku konca hry (výhra, prehra)
      */
     public KoniecMenu(ArrayList<Zombik> baloniky, String cesta) {
-        this.prehraMenu = new Obrazok(cesta, 80, -50);
-        this.prehraMenu.zobraz();
+        this.prehraMenu = new Obrazok(cesta, 80, -50); // Inicializácia obrázku pre obrazovku konca hry
+        this.prehraMenu.zobraz(); // Zobrazenie obrázku
 
+        // Vytvorenie textu s počtom zostávajúcich zombikov
         this.pocetZvysnychBalonikov = new BlokTextu("Stačilo ti už zabiť iba\n" + "       " + String.valueOf(baloniky.size()) + " balónikov.", 200, 600);
-        this.pocetZvysnychBalonikov.zmenFont("Times New Roman", this.bold, 60);
-        this.pocetZvysnychBalonikov.zmenFarbu("yellow");
-        this.pocetZvysnychBalonikov.zobraz();
-
-
+        this.pocetZvysnychBalonikov.zmenFont("Times New Roman", this.bold, 60); // Zmena fontu textu
+        this.pocetZvysnychBalonikov.zmenFarbu("yellow"); // Zmena farby textu
+        this.pocetZvysnychBalonikov.zobraz(); // Zobrazenie textu
     }
 
     /**
-     * Skryje napis  s počtom  balónikov ktore su este na zive(v pripade vyhry aby tam nebola 0).
+     * Skryje počet zostávajúcich zombikov.
      */
     public void skryZvysneBaloniky() {
-        this.pocetZvysnychBalonikov.skry();
+        this.pocetZvysnychBalonikov.skry(); // Skrytie textu s počtom zostávajúcich zombikov
     }
 }

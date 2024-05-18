@@ -2,6 +2,11 @@ package triedy.mechanika;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import fri.shapesge.BlokTextu;
 import fri.shapesge.Manazer;
@@ -20,15 +25,9 @@ import triedy.zombici.Duch;
 import triedy.zombici.Zaba;
 import triedy.zombici.Zombik;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
-/**@Matus Korman
- * Trieda triedy.mechanika.Hra reprezentuje herné prostredie stara sa o ovladanie hraca.Kontroluje koliziu balonikov s hracom.
- * Taktiez ma nastarosti stav hry a koniec hry.
+/**
+ * Trieda triedy.mechanika.Hra reprezentuje herné prostredie, stará sa o ovládanie hráča a kontroluje kolíziu balónikov s hráčom.
+ * Taktiež má na starosti stav hry a koniec hry.
  */
 public class Hra {
 
@@ -44,12 +43,12 @@ public class Hra {
     private StylFontu bold;
 
     /**
-     * 
      * Konštruktor inicializuje herné prostredie a objekty v ňom.
-     * <p>
-     * throws IOException Ak nastane chyba pri načítaní mapy.
+     *
+     * @param mapa Cesta k súboru mapy
+     * @throws RuntimeException Ak nastane chyba pri načítaní mapy.
      */
-    public Hra(String mapa)  {
+    public Hra(String mapa) {
         // Inicializácia premenných
         this.smer = Smer.DOLE;
         this.bonusy = new ArrayList<>();
@@ -58,22 +57,23 @@ public class Hra {
         this.manazer = new Manazer();
         this.manazer.spravujObjekt(this);
         this.zombici = new ArrayList<>();
+
         try {
             if (mapa.equals("files/m.txt")) {
                 this.pripravMapu1();
             } else if (mapa.equals("files/m2.txt")) {
                 this.pripravMapu2();
             }
-        }catch (IOException e) {
-            throw new RuntimeException("Chyba pri náčítani mapy");
+        } catch (IOException e) {
+            throw new RuntimeException("Chyba pri načítaní mapy", e);
         }
+
         Rectangle obdlznikHraca = new Rectangle(this.hrac.getPolohaX(), this.hrac.getPolohaY(), 32, 38);
         this.kolizie = new Kolizie(obdlznikHraca, this.vytvorObdlznikyBalonikov());
     }
 
     /**
-     * Vytvorí obdĺžniky(hitboxy) pre všetky balóniky.
-
+     * Vytvorí obdĺžniky (hitboxy) pre všetky balóniky.
      */
     private ArrayList<Rectangle> vytvorObdlznikyBalonikov() {
         ArrayList<Rectangle> obdlzniky = new ArrayList<>();
@@ -83,39 +83,31 @@ public class Hra {
         return obdlzniky;
     }
 
-    private void pripravMapu1()  {
-        try {
-            this.zombici.add(new Balonik(355, 800, this.mapa, true));
-            this.zombici.add(new Balonik(555, 600, this.mapa, true));
-            this.zombici.add(new Balonik(700, 755, this.mapa, false));
-            this.zombici.add(new Balonik(55, 555, this.mapa, false));
-            this.zombici.add(new Balonik(155, 155, this.mapa, false));
-            this.zombici.add(new Balonik(355, 55, this.mapa, false));
-            this.zombici.add(new Balonik(850, 850, this.mapa, true));
-            this.zombici.add(new Duch(850, 150, this.mapa, this.hrac));
-            this.bonusy.add(new BonusZivot(640, 700));
-            this.bonusy.add(new BonusZivot(250, 250));
-        }catch (IOException e) {
-            throw new RuntimeException("Chyba pri načítani mapy.");
-        }
+    private void pripravMapu1() throws IOException {
+        this.zombici.add(new Balonik(355, 800, this.mapa, true));
+        this.zombici.add(new Balonik(555, 600, this.mapa, true));
+        this.zombici.add(new Balonik(700, 755, this.mapa, false));
+        this.zombici.add(new Balonik(55, 555, this.mapa, false));
+        this.zombici.add(new Balonik(155, 155, this.mapa, false));
+        this.zombici.add(new Balonik(355, 55, this.mapa, false));
+        this.zombici.add(new Balonik(850, 850, this.mapa, true));
+        this.zombici.add(new Duch(850, 150, this.mapa, this.hrac));
+        this.bonusy.add(new BonusZivot(640, 700));
+        this.bonusy.add(new BonusZivot(250, 250));
     }
 
     private void pripravMapu2() throws IOException {
-        try {
-            this.zombici.add(new Balonik(850, 500, this.mapa, true));
-            this.zombici.add(new Balonik(250, 350, this.mapa, false));
-            this.zombici.add(new Duch(850, 100, this.mapa, this.hrac));
-            this.zombici.add(new Zaba(200, 850, this.mapa, this.hrac));
-            this.zombici.add(new Zaba(750, 50, this.mapa, this.hrac));
-            this.zombici.add(new Zaba(50, 50, this.mapa, this.hrac));
-            this.zombici.add(new Zaba(750, 600, this.mapa, this.hrac));
-            this.zombici.add(new Zaba(700, 750, this.mapa, this.hrac));
-            this.bonusy.add(new BonusZivot(100, 750));
-            this.bonusy.add(new BonusRychlost(400, 50));
-            this.bonusy.add(new BonusZivot(850, 750));
-        }catch (IOException e) {
-            throw new RuntimeException("Chyba pri načítani mapy.");
-        }
+        this.zombici.add(new Balonik(850, 500, this.mapa, true));
+        this.zombici.add(new Balonik(250, 350, this.mapa, false));
+        this.zombici.add(new Duch(850, 100, this.mapa, this.hrac));
+        this.zombici.add(new Zaba(200, 850, this.mapa, this.hrac));
+        this.zombici.add(new Zaba(750, 50, this.mapa, this.hrac));
+        this.zombici.add(new Zaba(50, 50, this.mapa, this.hrac));
+        this.zombici.add(new Zaba(750, 600, this.mapa, this.hrac));
+        this.zombici.add(new Zaba(700, 750, this.mapa, this.hrac));
+        this.bonusy.add(new BonusZivot(100, 750));
+        this.bonusy.add(new BonusRychlost(400, 50));
+        this.bonusy.add(new BonusZivot(850, 750));
     }
 
     /**
@@ -164,7 +156,6 @@ public class Hra {
         posunHraca(Smer.VPRAVO);
     }
 
-
     /**
      * Aktivuje bombu, ak ešte nebola aktivovaná a hráč je nažive.
      */
@@ -201,14 +192,10 @@ public class Hra {
     }
 
     /**
-     * Sluzi na to aby nebolo mozne aktivovat novu bombu pokial aktualna este nevybuchla.
-     */
-
-
-    /**
      * Vráti novú polohu hráča na základe zvoleného smeru.
-     * <p>
-     * parameter Zvolený smer pohybu hráča.    
+     *
+     * @param smer Zvolený smer pohybu hráča.
+     * @return Nová poloha hráča.
      */
     private Poloha getNovaPoloha(Smer smer) {
         Poloha novaPoloha = this.hrac.getPoloha();
@@ -216,7 +203,7 @@ public class Hra {
     }
 
     /**
-     * Pohne hráča a aktualizuje Obdlznik ktory je okolo hraca na novu poziciu hraca.
+     * Pohne hráča a aktualizuje obdĺžnik, ktorý je okolo hráča, na novú pozíciu hráča.
      */
     public void vytvaranieHitboxov() {
         this.hrac.zobrazHraca();
@@ -230,26 +217,20 @@ public class Hra {
      * Kontroluje kolíziu medzi hráčom a balónikmi.
      */
     public void kontrolaKolizie() {
-
-
         if (this.kolizie != null) {
             ArrayList<Rectangle> obdlznikyBalonikov = new ArrayList<>();
             for (Zombik balonik : this.zombici) {
-                if(balonik.isZombikZivy()) {
+                if (balonik.isZombikZivy()) {
                     Rectangle noveObdlznikBalonika = new Rectangle(balonik.getZombikaX(), balonik.getZombikaY(), 40, 46);
                     obdlznikyBalonikov.add(noveObdlznikBalonika);
                 }
             }
-            this.kolizie.aktualizujObdlznikyBalonikov(obdlznikyBalonikov);
+            this.kolizie.aktualizujObdlznikyZombikov(obdlznikyBalonikov);
             if (this.hrac.isHracZivy() && this.kolizie.kontrolaKolizie()) {
-                if(!hrac.isBonusovyZivot()) {
+                if (!hrac.isBonusovyZivot()) {
                     this.smer = Smer.SMRTHRACA;
                     this.hrac.smrtHrca();
                 }
-
-
-
-
             }
         }
     }
@@ -257,21 +238,21 @@ public class Hra {
     /**
      * Kontroluje stav hry - ukončenie v prípade víťazstva alebo prehry.
      */
-    public  void  kontrolaStavuHry() {
+    public void kontrolaStavuHry() {
         KoniecMenu finish;
         if (this.zombici.size() == 0) {
             finish = new KoniecMenu(this.zombici, "files/win.png");
             finish.skryZvysneBaloniky();
-            this.manazer.prestanSpravovatObjekt(this); 
+            this.manazer.prestanSpravovatObjekt(this);
         }
         if (!this.hrac.isHracZivy()) {
             this.hrac.zobrazHraca();
             finish = new KoniecMenu(this.zombici, "files/gameover.png");
 
             for (Zombik balonik : this.zombici) {
-                balonik.prestanSpravovat();               
+                balonik.prestanSpravovat();
             }
             this.manazer.prestanSpravovatObjekt(this);
         }
-    }   
+    }
 }

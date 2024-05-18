@@ -5,7 +5,7 @@ import triedy.menu.StartMenu;
 
 import java.io.IOException;
 /** @Matus Korman
- * Spusti porgram cely.Stara sa o to  aby sa hra dala zapnut mimo bluej.
+ * Spusti porgram cely.Stara sa o to  aby sa hra dala zapnut.
  */
 public class Main {
     

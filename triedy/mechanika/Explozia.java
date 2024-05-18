@@ -4,7 +4,7 @@ import fri.shapesge.Obrazok;
 import java.util.ArrayList;
 import java.util.List;
 
-/** @Matus Korman
+/**
  * Trieda reprezentuje explóziu so stredom a vetvami v rôznych smeroch.
  */
 public class Explozia {
@@ -14,8 +14,8 @@ public class Explozia {
     /**
      * Konštruktor pre vytvorenie explózie na zadaných súradniciach.
      *
-     * parameter je x Súradnica stredu explózie
-     * parameter je y Súradnica stredu explózie
+     * @param x Súradnica stredu explózie
+     * @param y Súradnica stredu explózie
      */
     public Explozia(int x, int y) {
         this.stred = new Obrazok("files/stred.png", x, y);
@@ -37,6 +37,8 @@ public class Explozia {
 
     /**
      * Zobrazí vetvu explózie v danom smere.
+     *
+     * @param index Index vetvy explózie
      */
     public void zobrazVetvu(int index) {
         if (index >= 0 && index < this.casti.size()) {
@@ -44,18 +46,30 @@ public class Explozia {
         }
     }
 
+    /**
+     * Zobrazí vetvu explózie smerom vpravo.
+     */
     public void zobrazVpravo() {
         zobrazVetvu(0);
     }
 
+    /**
+     * Zobrazí vetvu explózie smerom vľavo.
+     */
     public void zobrazVlavo() {
         zobrazVetvu(1);
     }
 
+    /**
+     * Zobrazí vetvu explózie smerom hore.
+     */
     public void zobrazHore() {
         zobrazVetvu(2);
     }
 
+    /**
+     * Zobrazí vetvu explózie smerom dole.
+     */
     public void zobrazDole() {
         zobrazVetvu(3);
     }

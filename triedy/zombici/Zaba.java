@@ -5,41 +5,43 @@ import triedy.mapa.Mapa;
 import triedy.mapa.StavPolicka;
 import triedy.pohyb.Hrac;
 
-
 import java.io.IOException;
 import javax.swing.Timer;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class Zaba extends Zombik{
+/**
+ * Trieda reprezentuje žabu v hre.
+ */
+public class Zaba extends Zombik {
+
+    private int x; // Súradnica x žaby
+    private int y; // Súradnica y žaby
+    private final Mapa mapa; // Mapa, na ktorej sa žaba pohybuje
+    private String cesta; // Cesta k aktuálnemu obrázku
+    private Hrac hrac; // Referencia na hráča
+    private final int velkostPohybu = 1; // Veľkosť pohybu žaby
+
     /**
-     * Konštruktor pre vytvorenie zombíka na základe súradníc, mapy a orientácie pohybu.
-     * <p>
-     * parameter   Súradnica x balonika
-     * parameter   Súradnica y balonika
-     * parameter   triedy.mapa.Mapa, na ktorej sa balonik pohybuje
-     * parameter   Určuje, či sa balonik pohybuje vertikálne (true) alebo horizontálne (false)
+     * Konštruktor pre vytvorenie žaby na základe súradníc, mapy a hráča.
      *
-     * @param x
-     * @param y
-     * @param mapa
-     * @param cesta
+     * @param x     Súradnica x žaby
+     * @param y     Súradnica y žaby
+     * @param mapa  Mapa, na ktorej sa žaba pohybuje
+     * @param hrac  Referencia na hráča
      */
-    private int x;
-    private  int y;
-    private final Mapa mapa;
-    private String cesta;
-    private Hrac hrac;
-    private final int  velkostPohybu = 1;
     public Zaba(int x, int y, Mapa mapa, Hrac hrac) throws IOException {
         super(x, y, mapa, "files/ZABIAK1.png");
         this.x = x;
         this.y = y;
         this.mapa = mapa;
         this.cesta = "files/ZABIAK1.png";
-
         this.hrac = hrac;
     }
+
+    /**
+     * Spustí animáciu explózie žaby.
+     */
     private void vybchni() {
         this.zabiZombika();
         Timer delayBeforeExplosion = new Timer(2000, new ActionListener() {
@@ -79,6 +81,9 @@ public class Zaba extends Zombik{
         delayBeforeExplosion.start();
     }
 
+    /**
+     * Zabije hráča, ak sa nachádza v dosahu explózie žaby.
+     */
     public void zabiHracaAkJeVExplozii() {
         int vzdialenostX = Math.abs(this.hrac.getPolohaX() - this.x);
         int vzdialenostY = Math.abs(this.hrac.getPolohaY() - this.y);
@@ -87,9 +92,13 @@ public class Zaba extends Zombik{
             this.hrac.smrtHrca();
         }
     }
+
+    /**
+     * Vykoná pohyb žaby po osi Y.
+     */
     @Override
     public void pohybZombikaY() {
-        if(this.isZombikZivy()) {
+        if (this.isZombikZivy()) {
             int vzdialenostY = Math.abs(this.hrac.getPolohaY() - this.y);
             int vzdialenostX = Math.abs(this.hrac.getPolohaX() - this.x);
             if (vzdialenostY > 60) {
@@ -105,12 +114,14 @@ public class Zaba extends Zombik{
                 this.vybchni();
             }
         }
-
     }
 
+    /**
+     * Vykoná pohyb žaby po osi X.
+     */
     @Override
     public void pohybZombikaX() {
-        if(this.isZombikZivy()) {
+        if (this.isZombikZivy()) {
             int vzdialenostY = Math.abs(this.hrac.getPolohaY() - this.y);
             int vzdialenostX = Math.abs(this.hrac.getPolohaX() - this.x);
             if (vzdialenostX > 60) {
@@ -128,17 +139,22 @@ public class Zaba extends Zombik{
         }
     }
 
-
-
+    /**
+     * Zmení obrázok žaby na obrázok explózie a skryje žabu.
+     */
     @Override
     public void zmenObrazok() {
         this.setObrazok("files/ZABIAK5.png");
         this.skryZombika();
     }
 
+    /**
+     * Animácia žaby - mení obrázok žaby v závislosti na smeri pohybu.
+     */
     @Override
     public void animaciaZombika() {
-        if(this.isZombikZivy()){
+        if (this.isZombikZivy()) {
+
             switch (this.cesta) {
                 case "files/ZABIAK1.png":
                     this.setObrazok("files/ZABIAK2.png");
@@ -160,6 +176,13 @@ public class Zaba extends Zombik{
         }
     }
 
+    /**
+     * Kontroluje, či je možné sa posunúť na danú pozíciu.
+     *
+     * @param x Súradnica x
+     * @param y Súradnica y
+     * @return true, ak je možné sa pohnúť, inak false
+     */
     private boolean mozemSaPohnut(int x, int y){
         if(this.mapa.getPolicko(x, y) != StavPolicka.TRAVA){
             return false;
@@ -173,3 +196,5 @@ public class Zaba extends Zombik{
         return this.mapa.getPolicko(x + 30, y + 30) == StavPolicka.TRAVA;
     }
 }
+
+

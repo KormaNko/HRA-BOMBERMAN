@@ -2,60 +2,60 @@ package triedy.mechanika;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.List;
 
-/**@Matus Korman
- * V tejto triede pouzivam Rectangle z Javadoc dokumentáciu(Java Class Libraries).Pouzivam tu tvar Rectangle kvoli tomu
- * ze tvar Stvorec neobsahuje metodu intersects ktorou zistujem ci sa hrac a balonik navzajom dotkli.
- * https://docs.oracle.com/javase/8/docs/api/java/awt/Rectangle.html
- * 
- * 
- * Trieda zabezpečuje kontrolu kolízií medzi hráčom a balonikmi.
+/**
+ * Trieda zabezpečuje kontrolu kolízií medzi hráčom a zombikmi.
  */
 public class Kolizie {
-    private Rectangle obdlznikHraca;
-    private ArrayList<Rectangle> obdlznikyZombikov;
+    private Rectangle obdlznikHraca; // Obdĺžnik reprezentujúci hráča
+    private List<Rectangle> obdlznikyZombikov; // Zoznam obdĺžnikov reprezentujúcich zombikov na mape
 
     /**
      * Konštruktor pre inicializáciu kolízií.
      *
-     * Parameter obdĺžnik reprezentujúci hráča
-     * Parameter zoznam obdĺžnikov reprezentuje baloniky na mape
+     * @param obdlznikHraca obdĺžnik reprezentujúci hráča
+     * @param obdlznikyZombikov zoznam obdĺžnikov reprezentujúcich zombikov na mape
      */
-    public Kolizie(Rectangle obdlznikHraca, ArrayList<Rectangle> obdlznikyZombikov) {
+    public Kolizie(Rectangle obdlznikHraca, List<Rectangle> obdlznikyZombikov) {
+        // Inicializácia parametrov
         this.obdlznikHraca = obdlznikHraca;
-        this.obdlznikyZombikov = obdlznikyZombikov;
+        this.obdlznikyZombikov = new ArrayList<>(obdlznikyZombikov); // Použitie kópie zoznamu pre nezávislosť
     }
 
     /**
-     * Kontroluje kolíziu medzi hráčom a balonimi.
+     * Kontroluje kolíziu medzi hráčom a zombikmi.
      *
-     * Vracia true, ak došlo ku kolízii, inak false
+     * @return true, ak došlo ku kolízii, inak false
      */
     public boolean kontrolaKolizie() {
+        // Prechádza cez zoznam obdĺžnikov zombikov a kontroluje ich kolíziu s obdĺžnikom hráča
         for (Rectangle obdlznikZombika : this.obdlznikyZombikov) {
             if (this.obdlznikHraca.intersects(obdlznikZombika)) {
-                return true;
+                return true; // Ak sa kolízia nájde, vráti true
             }
         }
-        return false;
+        return false; // Ak sa žiadna kolízia nenájde, vráti false
     }
 
     /**
      * Aktualizuje obdĺžnik reprezentujúci hráča.
      *
-     * Parameter nový obdĺžnik hráča
+     * @param novyObdlznikHraca nový obdĺžnik hráča
      */
     public void aktualizujObdlznikHraca(Rectangle novyObdlznikHraca) {
+        // Aktualizuje obdĺžnik hráča na základe nového obdĺžnika
         this.obdlznikHraca = novyObdlznikHraca;
     }
 
     /**
-     * Aktualizuje zoznam obdĺžnikov reprezentujúcich baloniky.
+     * Aktualizuje zoznam obdĺžnikov reprezentujúcich zombikov.
      *
-     * Parameter nový zoznam obdĺžnikov balonikov.
+     * @param noveObdlznikyZombikov nový zoznam obdĺžnikov zombikov
      */
-    public void aktualizujObdlznikyBalonikov(ArrayList<Rectangle> noveObdlznikyZombikov) {
-        this.obdlznikyZombikov.clear();
-        this.obdlznikyZombikov.addAll(noveObdlznikyZombikov);
+    public void aktualizujObdlznikyZombikov(List<Rectangle> noveObdlznikyZombikov) {
+        // Aktualizuje zoznam obdĺžnikov zombikov na základe nového zoznamu
+        this.obdlznikyZombikov.clear(); // Vyčistí existujúci zoznam
+        this.obdlznikyZombikov.addAll(noveObdlznikyZombikov); // Pridá všetky prvky z nového zoznamu
     }
 }

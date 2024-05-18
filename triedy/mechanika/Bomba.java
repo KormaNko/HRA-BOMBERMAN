@@ -11,33 +11,35 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.ArrayList;
-/**@Matus Korman
- * V tejto triede pouzivam casovac z Javadoc dokumentácie(Java Class Libraries). 
+
+/**
+ * Trieda reprezentuje bombu, ktorá môže explodovať a zabíjať veci, ktoré má v dosahu.
+ * <p>
+ * V tejto triede používam časovač z Javadoc dokumentácie (Java Class Libraries).
  * <a href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ScheduledExecutorService.html">...</a>!
- *
- *
- * Trieda reprezentuje bombu, ktorá môže explodovať a zabijat veci ktore ma v dosahu.
+ * </p>
  */
 public class Bomba {
-    private static Obrazok bomba;              // Obrázok bomby
+    private static Obrazok bomba;             // Obrázok bomby
     private final int bombaX;                 // Súradnica x bomby
     private final int bombaY;                 // Súradnica y bomby
-    private Explozia explozia;          // Objekt explózie spojenej s bombou
-    private final Mapa mapa;                  // triedy.mapa.Mapa, na ktorej sa bomba nachádza
+    private Explozia explozia;                // Objekt explózie spojenej s bombou
+    private final Mapa mapa;                  // Mapa, na ktorej sa bomba nachádza
     private final Hrac hrac;                  // Hráč, ktorého môže bomba zabiť
-    private final ArrayList<Zombik> zombici; // Zoznam zombíkov, ktorých môže bomba zabiť
+    private final ArrayList<Zombik> zombici;  // Zoznam zombíkov, ktorých môže bomba zabiť
+
     /**
      * Konštruktor pre vytvorenie bomby na zadaných súradniciach.
-     * <p>
-     * parameter Súradnica x bomby
-     * parameter Súradnica y bomby
-     * parameter triedy.mapa.Mapa, na ktorej sa bomba nachádza
-     * parameter Hráč, ktorého môže bomba zabiť
-     * parameter Zoznam zombíkov, ktorých môže bomba zabiť
+     *
+     * @param x       Súradnica x bomby
+     * @param y       Súradnica y bomby
+     * @param mapa    Mapa, na ktorej sa bomba nachádza
+     * @param hrac    Hráč, ktorého môže bomba zabiť
+     * @param zombici Zoznam zombíkov, ktorých môže bomba zabiť
      */
     public Bomba(int x, int y, Mapa mapa, Hrac hrac, ArrayList<Zombik> zombici) {
-        this.bombaX = x; 
-        this.bombaY = y; 
+        this.bombaX = x;
+        this.bombaY = y;
         bomba = new Obrazok("files/bomba.png", x, y);
         bomba.zobraz();
         this.mapa = mapa;
@@ -54,6 +56,8 @@ public class Bomba {
 
     /**
      * Získa súradnicu x bomby.
+     *
+     * @return súradnica x bomby
      */
     public int getBombaX() {
         return this.bombaX;
@@ -61,6 +65,8 @@ public class Bomba {
 
     /**
      * Získa súradnicu y bomby.
+     *
+     * @return súradnica y bomby
      */
     public int getBombaY() {
         return this.bombaY;
@@ -68,7 +74,6 @@ public class Bomba {
 
     /**
      * Spustí explóziu bomby s oneskorením.
-     *
      */
     public void vybuchBombySOneskorenim() {
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
@@ -87,6 +92,13 @@ public class Bomba {
         executor.shutdown();
     }
 
+    /**
+     * Skontroluje a zobrazí explóziu v danom smere.
+     *
+     * @param x         Súradnica x
+     * @param y         Súradnica y
+     * @param direction Smer explózie
+     */
     private void skontrolUkazExploziu(int x, int y, String direction) {
         if (this.mapa.getPolicko(x, y) != StavPolicka.PEVNASTENA) {
             this.mapa.zmenaPolickoNaTravu(x, y);
@@ -107,14 +119,13 @@ public class Bomba {
         }
     }
 
-
     /**
-     * Skryje explóziu s oneskorením. 
+     * Skryje explóziu s oneskorením.
      */
     private void skryExploziu() {
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
         executor.schedule(() -> this.explozia.skryExploziu(), 1, TimeUnit.SECONDS);
-        executor.shutdown();             
+        executor.shutdown();
     }
 
     /**
@@ -145,15 +156,14 @@ public class Bomba {
 
     /**
      * Skontroluje, či je pozícia v dosahu výbuchu.
-     * <p>
-     * parameter   Riadok entity
-     * parameter   Stĺpec entity
-     * parameter   Riadok bomby
-     * parameter   Stĺpec bomby
-     * parameter   True, ak je v dosahu výbuchu, inak false
+     *
+     * @param entityRiadok  Riadok entity
+     * @param entityStlpec  Stĺpec entity
+     * @param bombaRiadok   Riadok bomby
+     * @param bombaStlpec   Stĺpec bomby
+     * @return True, ak je v dosahu výbuchu, inak false
      */
     private boolean jeVDosahu(int entityRiadok, int entityStlpec, int bombaRiadok, int bombaStlpec) {
         return entityRiadok == bombaRiadok && (entityStlpec == bombaStlpec || entityStlpec == bombaStlpec - 1 || entityStlpec == bombaStlpec + 1) || entityStlpec == bombaStlpec && (entityRiadok == bombaRiadok - 1 || entityRiadok == bombaRiadok + 1);
     }
-
 }
