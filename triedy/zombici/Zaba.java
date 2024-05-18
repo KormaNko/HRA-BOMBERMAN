@@ -17,7 +17,7 @@ public class Zaba extends Zombik {
     private int y; // Súradnica y žaby
     private final Mapa mapa; // Mapa, na ktorej sa žaba pohybuje
     private String cesta; // Cesta k aktuálnemu obrázku
-    private Hrac hrac; // Referencia na hráča
+    private final Hrac hrac; // Referencia na hráča
     private final int velkostPohybu = 1; // Veľkosť pohybu žaby
 
     /**
@@ -42,41 +42,35 @@ public class Zaba extends Zombik {
      */
     private void vybchni() {
         this.zabiZombika();
-        Timer delayBeforeExplosion = new Timer(2000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Obrazok explozia = new Obrazok("files/EXPLOZIA/EXPLOZIA0.png", Zaba.this.x - 100, Zaba.this.y - 100);
-                explozia.zobraz();
-                Timer animationTimer = new Timer(100, new ActionListener() {
-                    private int index = 1;
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        if (index < 12) {
-                            explozia.zmenObrazok("files/EXPLOZIA/EXPLOZIA" + index + ".png");
-                            index++;
-                        } else {
-                            ((Timer) e.getSource()).stop();
-                            Timer delayBeforeHide = new Timer(1000, new ActionListener() {
-                                @Override
-                                public void actionPerformed(ActionEvent e) {
-                                    explozia.skry();
-                                    Zaba.this.zabiHracaAkJeVExplozii();
-                                    ((Timer) e.getSource()).stop();
-                                }
-                            });
-                            delayBeforeHide.setRepeats(false);
-                            delayBeforeHide.start();
-                        }
+        Timer casPredExploziou = new Timer(2000, e -> {
+            Obrazok explozia = new Obrazok("files/EXPLOZIA/EXPLOZIA0.png", Zaba.this.x - 100, Zaba.this.y - 100);
+            explozia.zobraz();
+            Timer casovacAnimacie = new Timer(100, new ActionListener() {
+                private int index = 1;
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if (index < 12) {
+                        explozia.zmenObrazok("files/EXPLOZIA/EXPLOZIA" + index + ".png");
+                        index++;
+                    } else {
+                        ((Timer) e.getSource()).stop();
+                        Timer casPredSkrytim = new Timer(1000, e1 -> {
+                            explozia.skry();
+                            Zaba.this.zabiHracaAkJeVExplozii();
+                            ((Timer) e1.getSource()).stop();
+                        });
+                        casPredSkrytim.setRepeats(false);
+                        casPredSkrytim.start();
                     }
-                });
-                animationTimer.setRepeats(true);
-                animationTimer.start();
+                }
+            });
+            casovacAnimacie.setRepeats(true);
+            casovacAnimacie.start();
 
-                ((Timer) e.getSource()).stop();
-            }
+            ((Timer) e.getSource()).stop();
         });
-        delayBeforeExplosion.setRepeats(false);
-        delayBeforeExplosion.start();
+        casPredExploziou.setRepeats(false);
+        casPredExploziou.start();
     }
 
     /**

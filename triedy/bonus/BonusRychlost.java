@@ -8,7 +8,7 @@ import triedy.pohyb.Hrac;
  */
 public class BonusRychlost implements Bonus {
 
-    private Obrazok obrazok;
+    private final Obrazok obrazok;
 
     private final int x;
     private final int y;

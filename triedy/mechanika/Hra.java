@@ -39,7 +39,7 @@ public class Hra {
     private final ArrayList<Zombik> zombici;
     private final Kolizie kolizie;
 
-    private ArrayList<Bonus> bonusy;
+    private final ArrayList<Bonus> bonusy;
     private StylFontu bold;
 
     /**
@@ -185,8 +185,8 @@ public class Hra {
                 iterator.remove();
 
                 ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-                scheduler.schedule(() -> blokTextu.skry(), 5, TimeUnit.SECONDS);
-                scheduler.schedule(() -> scheduler.shutdown(), 6, TimeUnit.SECONDS);
+                scheduler.schedule(blokTextu::skry, 5, TimeUnit.SECONDS);
+                scheduler.schedule(scheduler::shutdown, 6, TimeUnit.SECONDS);
             }
         }
     }
@@ -240,7 +240,7 @@ public class Hra {
      */
     public void kontrolaStavuHry() {
         KoniecMenu finish;
-        if (this.zombici.size() == 0) {
+        if (this.zombici.isEmpty()) {
             finish = new KoniecMenu(this.zombici, "files/win.png");
             finish.skryZvysneBaloniky();
             this.manazer.prestanSpravovatObjekt(this);

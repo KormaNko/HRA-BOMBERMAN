@@ -9,7 +9,7 @@ import java.util.List;
  */
 public class Kolizie {
     private Rectangle obdlznikHraca; // Obdĺžnik reprezentujúci hráča
-    private List<Rectangle> obdlznikyZombikov; // Zoznam obdĺžnikov reprezentujúcich zombikov na mape
+    private final List<Rectangle> obdlznikyZombikov; // Zoznam obdĺžnikov reprezentujúcich zombikov na mape
 
     /**
      * Konštruktor pre inicializáciu kolízií.

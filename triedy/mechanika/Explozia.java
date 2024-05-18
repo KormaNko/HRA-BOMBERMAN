@@ -8,8 +8,8 @@ import java.util.List;
  * Trieda reprezentuje explóziu so stredom a vetvami v rôznych smeroch.
  */
 public class Explozia {
-    private Obrazok stred;  // Obrázok stredovej časti explózie
-    private List<Obrazok> casti;  // Zoznam častí explózie
+    private final Obrazok stred;  // Obrázok stredovej časti explózie
+    private final List<Obrazok> casti;  // Zoznam častí explózie
 
     /**
      * Konštruktor pre vytvorenie explózie na zadaných súradniciach.

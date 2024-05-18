@@ -111,9 +111,7 @@ public abstract class Zombik {
      */
     public void skryZombika() {
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-        executor.schedule(() -> {
-            this.zombik.skry();
-        }, 2, TimeUnit.SECONDS);
+        executor.schedule(this.zombik::skry, 2, TimeUnit.SECONDS);
         executor.shutdown();
     }
 

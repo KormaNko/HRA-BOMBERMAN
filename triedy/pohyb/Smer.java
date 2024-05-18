@@ -1,7 +1,5 @@
 package triedy.pohyb;
 
-import triedy.mechanika.Hra;
-
 /**
  * Enum reprezentuje rôzne smerové vektory a k nim priradené obrázky.
  * Trieda triedy.pohyb.Smer definuje rôzne smerové vektory a priradzuje k nim cesty k obrázkom.
@@ -21,14 +19,11 @@ public enum Smer {
      * @return Súradnica X
      */
     public int getX() {
-        switch (this) {
-            case VPRAVO:
-                return 1;
-            case VLAVO:
-                return -1;
-            default:
-                return 0;
-        }
+        return switch (this) {
+            case VPRAVO -> 1;
+            case VLAVO -> -1;
+            default -> 0;
+        };
     }
 
     /**
@@ -37,14 +32,11 @@ public enum Smer {
      * @return Súradnica Y
      */
     public int getY() {
-        switch (this) {
-            case HORE:
-                return -1;
-            case DOLE:
-                return 1;
-            default:
-                return 0;
-        }
+        return switch (this) {
+            case HORE -> -1;
+            case DOLE -> 1;
+            default -> 0;
+        };
     }
 
     /**
@@ -53,19 +45,13 @@ public enum Smer {
      * @return Cesta k obrázku
      */
     public String getCesta() {
-        switch (this) {
-            case HORE:
-                return "HORE";
-            case DOLE:
-                return "DOLE";
-            case VPRAVO:
-                return "VPRAVO";
-            case VLAVO:
-                return "VLAVO";
-            case SMRTHRACA:
-                return "MRTVOLAHRACA";
-            default:
-                return null;
-        }
+        return switch (this) {
+            case HORE -> "HORE";
+            case DOLE -> "DOLE";
+            case VPRAVO -> "VPRAVO";
+            case VLAVO -> "VLAVO";
+            case SMRTHRACA -> "MRTVOLAHRACA";
+            default -> null;
+        };
     }
 }

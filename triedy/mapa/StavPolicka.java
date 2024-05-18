@@ -6,5 +6,5 @@ package triedy.mapa;
 public enum StavPolicka {
     TRAVA,         // Políčko s trávou
     SLABASTENA ,    // Políčko so slabou stenou
-    PEVNASTENA;     // Políčko s pevnou stenou
+    PEVNASTENA     // Políčko s pevnou stenou
 }

@@ -1,9 +1,8 @@
 package triedy.pohyb;
 
-import fri.shapesge.Obrazok;
 import fri.shapesge.Manazer;
-import triedy.pohyb.Poloha;
-import triedy.pohyb.Smer;
+import fri.shapesge.Obrazok;
+
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -15,7 +14,6 @@ public class Hrac {
     private  Poloha poloha;          // Aktuálna poloha hráča
     private final Obrazok postava;   // Obrázok hráča
     private boolean hracJeZivy;      // Určuje, či je hráč nažive
-    private Manazer manazer;         // Manazer pre interakciu s hráčom
     private int cisloAnimaciaHraca;  // Číslo aktuálnej animácie hráča
     private boolean bonusovyZivot;   // Určuje, či má hráč bonusový život
     private  int velkostKroku;       // Veľkosť kroku hráča pri pohybe
@@ -26,8 +24,9 @@ public class Hrac {
      * @param poloha Počiatočná poloha hráča
      */
     public Hrac(Poloha poloha) {
-        this.manazer = new Manazer(); // Inicializácia manazéra
-        this.manazer.spravujObjekt(this); // Pripojenie hráča k manazeru
+        // Manazer pre interakciu s hráčom
+        Manazer manazer = new Manazer(); // Inicializácia manazéra
+        manazer.spravujObjekt(this); // Pripojenie hráča k manazeru
         this.hracJeZivy = true; // Nastavenie stavu hráča na "nažive"
         this.poloha = poloha; // Nastavenie počiatočnej polohy hráča
         this.postava = new Obrazok("files/"+poloha.getCesta() + "1.png" ); // Vytvorenie obrázka hráča
@@ -115,9 +114,9 @@ public class Hrac {
 
             ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1); // Vytvorenie plánovača úloh
             // Plánované skrytie efektu bonusového života po 2 sekundách
-            scheduler.schedule(() -> obrazok.skry(), 2, TimeUnit.SECONDS);
+            scheduler.schedule(obrazok::skry, 2, TimeUnit.SECONDS);
             // Ukončenie plánovača úloh po 6 sekundách
-            scheduler.schedule(() -> scheduler.shutdown(), 6, TimeUnit.SECONDS);
+            scheduler.schedule(scheduler::shutdown, 6, TimeUnit.SECONDS);
             odoberBonusovyZivotWithDelay(); // Odstránenie bonusového života po určitom čase
         }
 

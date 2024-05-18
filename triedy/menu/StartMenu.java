@@ -8,8 +8,7 @@ import triedy.mechanika.Hra;
  * Trieda reprezentuje úvodné menu hry.
  */
 public class StartMenu {
-    private Obrazok obrazok; // Obrázok pre úvodné menu
-    private Manazer manazer; // Manazer pre interakciu s úvodným menu
+    private final Obrazok obrazok; // Obrázok pre úvodné menu
 
     private boolean hraBezi; // Určuje, či už beží hra alebo nie
 
@@ -20,8 +19,9 @@ public class StartMenu {
         this.obrazok = new Obrazok("files/BOMBERMANSTART.png", 0, 0); // Inicializácia obrázku pre úvodné menu
         this.obrazok.zobraz(); // Zobrazenie obrázku
 
-        this.manazer = new Manazer(); // Inicializácia manazéra
-        this.manazer.spravujObjekt(this); // Pripojenie úvodného menu k manazeru
+        // Manazer pre interakciu s úvodným menu
+        Manazer manazer = new Manazer(); // Inicializácia manazéra
+        manazer.spravujObjekt(this); // Pripojenie úvodného menu k manazeru
 
         this.hraBezi = false; // Nastavenie počiatočného stavu hry na "nebeží"
     }

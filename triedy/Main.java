@@ -1,6 +1,5 @@
 package triedy;
 
-import triedy.mechanika.Hra;
 import triedy.menu.StartMenu;
 
 import java.io.IOException;
